@@ -1,0 +1,132 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+
+model Industry {
+  id          Int        @id @default(autoincrement())
+  name        String     @unique
+  slug        String     @unique
+  description String
+  companies   Company[]
+  tools       Tool[]
+  useCases    UseCaseCard[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+model Company {
+  id              Int           @id @default(autoincrement())
+  name            String        @unique
+  slug            String        @unique
+  description     String
+  websiteUrl      String
+  foundedYear     Int?
+  totalFundingUsd Int?
+  approachSummary String
+  modelType       ModelType
+  industry        Industry      @relation(fields: [industryId], references: [id])
+  industryId      Int
+  tools           Tool[]
+  fundingRounds   FundingRound[]
+  acquisitions    Acquisition[] @relation("Acquirer")       // This company acquired others
+  useCaseCards     UseCaseCard[]
+  acquiredBy      Acquisition?  @relation("Acquired")       // This company was acquired
+  tags            CompanyTag[]
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}
+
+model Acquisition {
+  id                  Int      @id @default(autoincrement())
+  acquiringCompany    Company  @relation("Acquirer", fields: [acquiringCompanyId], references: [id])
+  acquiringCompanyId  Int
+
+  acquiredCompany     Company  @relation("Acquired", fields: [acquiredCompanyId], references: [id])
+  acquiredCompanyId   Int      @unique // ensures this company can only be acquired once
+
+  amountUsd           Int?
+  date                DateTime
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+}
+
+
+
+model Tool {
+  id          Int       @id @default(autoincrement())
+  name        String    @unique
+  description String
+  websiteUrl  String
+  isOpenSource Boolean
+  useCase     String
+  company     Company?  @relation(fields: [companyId], references: [id])
+  companyId   Int?
+  industry    Industry? @relation(fields: [industryId], references: [id])
+  industryId  Int?
+  tags        ToolTag[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model FundingRound {
+  id          Int       @id @default(autoincrement())
+  company     Company   @relation(fields: [companyId], references: [id])
+  companyId   Int
+  roundType   String
+  amountUsd   Int
+  date        DateTime
+  leadInvestor String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+
+
+model UseCaseCard {
+  id          Int       @id @default(autoincrement())
+  title       String
+  description String
+  exampleCompanyId Int?
+  exampleCompany   Company? @relation(fields: [exampleCompanyId], references: [id])
+  industry    Industry @relation(fields: [industryId], references: [id])
+  industryId  Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model CompanyTag {
+  id         Int      @id @default(autoincrement())
+  label      String
+  company    Company  @relation(fields: [companyId], references: [id])
+  companyId  Int
+}
+
+model ToolTag {
+  id       Int     @id @default(autoincrement())
+  label    String
+  tool     Tool    @relation(fields: [toolId], references: [id])
+  toolId   Int
+}
+
+enum ModelType {
+  LLM
+  CV
+  RL
+  ClassicalML
+  MultiModal
+  Other
+}
