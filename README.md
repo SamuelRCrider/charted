@@ -1,37 +1,63 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Charted
+
+Charted is a web application that maps the AI ecosystem across different industries. It helps users discover AI companies and tools by industry, identify gaps in AI innovation, and track the latest trends in artificial intelligence.
+
+## Key Features
+
+- **Industry Explorer**: Browse AI applications across various industries
+- **Company Directory**: Discover AI companies, their funding, and technologies
+- **Tool Catalog**: Explore AI tools and solutions categorized by industry and use case
+- **Gap Radar™**: Identify industries and subdomains with limited AI presence
+- **Trend Signals**: Track funding events, acquisitions, and emerging patterns in the AI ecosystem
+- **Use Case Examples**: Explore real-world applications of AI with concrete examples from each industry
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- [Node.js](https://nodejs.org/) (version 20 or later)
+- [Docker](https://www.docker.com/) for running the PostgreSQL database
+
+### Installation
+
+1. Clone the repository
+2. Install dependencies:
 
 ```bash
-docker-compose up
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+3. Start the PostgreSQL database:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+docker-compose up -d
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. Run the development server:
 
-## Learn More
+```bash
+npm run dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the application.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Tech Stack
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Frontend**: Next.js 15, React 19, Tailwind CSS 4
+- **Database**: PostgreSQL with Prisma ORM
+- **Development**: TypeScript, ESLint, Turbopack
 
-## Deploy on Vercel
+## Database Schema
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The application uses a PostgreSQL database with the following main entities:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Industries
+- Companies
+- Tools
+- Funding Rounds
+- Acquisitions
+- Use Cases
+
+## License
+
+This project is proprietary and confidential.
