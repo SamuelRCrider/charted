@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "@/app/generated/prisma";
 
 const prisma = new PrismaClient();
 
 // Define a type for the response data, including the company count
 type IndustryData = {
-  id: string; // Or number, depending on your schema
+  id: number; // Changed from string to number to match schema
   name: string;
   descriptionSummary: string | null;
   companyCount: number;
@@ -14,7 +14,7 @@ type IndustryData = {
 // Define the type for the raw industry object returned by Prisma
 // This helps ensure type safety when mapping the data
 type RawIndustry = {
-  id: string; // Or number
+  id: number; // Changed from string to number to match schema
   name: string;
   description: string | null;
   _count: {
