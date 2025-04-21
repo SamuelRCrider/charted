@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 type Industry = {
   id: number;
@@ -23,6 +24,28 @@ export default function ToolsFilters({
   openSourceCount,
   commercialCount,
 }: ToolsFiltersProps) {
+  const router = useRouter();
+
+  const handleIndustryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const url = new URL(window.location.href);
+    if (e.target.value) {
+      url.searchParams.set("industry", e.target.value);
+    } else {
+      url.searchParams.delete("industry");
+    }
+    router.push(url.toString());
+  };
+
+  const handleOpenSourceChange = (isOpenSource: boolean | undefined) => {
+    const url = new URL(window.location.href);
+    if (isOpenSource === isOpenSourceFilter) {
+      url.searchParams.delete("isOpenSource");
+    } else {
+      url.searchParams.set("isOpenSource", String(isOpenSource));
+    }
+    router.push(url.toString());
+  };
+
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4 mb-8">
       <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
@@ -42,15 +65,7 @@ export default function ToolsFilters({
             id="industry-filter"
             className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white"
             defaultValue={industryFilter ?? ""}
-            onChange={(e) => {
-              const url = new URL(window.location.href);
-              if (e.target.value) {
-                url.searchParams.set("industry", e.target.value);
-              } else {
-                url.searchParams.delete("industry");
-              }
-              window.location.href = url.toString();
-            }}
+            onChange={handleIndustryChange}
           >
             <option value="">All Industries</option>
             {industries.map((industry) => (
@@ -73,15 +88,7 @@ export default function ToolsFilters({
                   ? "bg-blue-600 text-white"
                   : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600"
               } rounded-l-md`}
-              onClick={() => {
-                const url = new URL(window.location.href);
-                if (isOpenSourceFilter === true) {
-                  url.searchParams.delete("isOpenSource");
-                } else {
-                  url.searchParams.set("isOpenSource", "true");
-                }
-                window.location.href = url.toString();
-              }}
+              onClick={() => handleOpenSourceChange(true)}
             >
               Open Source ({openSourceCount})
             </button>
@@ -91,15 +98,7 @@ export default function ToolsFilters({
                   ? "bg-blue-600 text-white"
                   : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600"
               } rounded-r-md border-l-0`}
-              onClick={() => {
-                const url = new URL(window.location.href);
-                if (isOpenSourceFilter === false) {
-                  url.searchParams.delete("isOpenSource");
-                } else {
-                  url.searchParams.set("isOpenSource", "false");
-                }
-                window.location.href = url.toString();
-              }}
+              onClick={() => handleOpenSourceChange(false)}
             >
               Commercial ({commercialCount})
             </button>

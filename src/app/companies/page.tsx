@@ -62,7 +62,7 @@ export default async function CompaniesPage({
     },
   });
 
-  // Get the unique model types used
+  // Get the unique model types
   const modelTypes = Object.values(ModelType);
 
   return (
